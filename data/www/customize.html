@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>yoRadio – Customize</title>
+
+    <!-- Ugyanazok az assetek, mint options.html -->
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="theme.css" />
+
+    <style>
+      .pagetitle { padding: 0 }
+      .inputwrap.disabled { opacity: .55; pointer-events: none }
+      .toast {
+        position: fixed; right: 12px; bottom: 12px;
+        background: #111; color: #fff; padding: 8px 12px;
+        border-radius: 8px; opacity: 0; transition: opacity .2s;
+        z-index: 9999;
+      }
+      #group_vubands .title::before,
+      #group_vumoves .title::before { content: none; }
+    </style>
+
+    <style id="swatches-css">
+      .swatches { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap }
+      .swatches button {
+        width: 22px; height: 22px; border: 1px solid #888;
+        border-radius: 4px; padding: 0; cursor: pointer;
+      }
+      .swatches button[data-color="#ffffff"] { background: #ffffff }
+      .swatches button[data-color="#ff0000"] { background: #ff0000 }
+      .swatches button[data-color="#00ff00"] { background: #00ff00 }
+      .swatches button[data-color="#0000ff"] { background: #0000ff }
+      .swatches button[data-color="#ffff00"] { background: #ffff00 }
+      .swatches button[data-color="#00ffff"] { background: #00ffff }
+      .swatches button[data-color="#ff00ff"] { background: #ff00ff }
+      .swatches button[data-color="#ff8800"] { background: #ff8800 }
+      .swatches button[data-color="#000000"] { background: #000000 }
+    </style>
+  </head>
+
+  <body>
+    <div id="playerwrap" class="classchange">
+      <div id="logo" class="ls"></div>
+      <h2 class="pagetitle">Customize</h2>
+
+      <div class="navigation" id="navigation">
+        <div class="navitem" data-target="group_theme">Theme</div>
+        <div class="navitem" data-target="group_layout">Layout</div>
+        <div class="navitem" data-target="group_vubands">Bands</div>
+        <div class="navitem" data-target="group_vudynamics">Dynamics</div>
+        <div class="navitem" data-target="group_vumoves">Smoothing</div>
+        <div class="navitem" data-target="group_misc">Misc</div>
+        <div class="navitem" data-target="group_tts">TTS</div>
+        <div class="navitem" id="nav_ledstrip" data-target="group_ledstrip">strip</div>
+      </div>
+
+      <div id="settingswrap">
+        <div id="settingscontent">
+          <!-- THEME -->
+          <section class="group" id="group_theme">
+            <div class="title"><span>theme</span></div>
+            <div class="flex-row last">
+              <label for="themefile" class="fb local" style="text-align:center;">Upload Theme</label>
+              <input type="file" id="themefile" name="upload" hidden />
+            </div>
+            <div class="flex-row last">
+              <a
+                href="https://vip-cxema.org/index.php/online-raschjoty/464-yoradio-redaktor-tem"
+                target="_blank"
+                style="margin-top:6px; display:inline-block; font-size:.9em;"
+              >
+                Online Theme Editor
+              </a>
+            </div>
+            <!-- Station line: kapcsoló külön sorban -->
+            <div class="flex-row">
+              <div class="inputwrap">
+                <div class="checkbox" id="stationLine">
+                  <div class="knob"></div>
+                  use a thin separator instead of a border
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-row">
+              <div class="checkbox" id="clockFontMono">
+                <div class="knob"></div>
+                <span>clock Shadow</span>
+              </div>
+            </div>
+
+            <div class="flex-row">
+              <div class="checkbox" id="monoTheme">
+                <div class="knob"></div>
+                <span>mono Theme</span>
+              </div>
+            </div>
+
+            <div class="flex-row">
+              <div class="checkbox" id="blDimEnable">
+                <div class="knob"></div>
+                <span>BL auto fade down</span>
+              </div>
+            </div>
+
+            <div class="flex-row">
+              <div class="inputwrap">
+                <span class="inputtitle">BL Down level</span>
+                <span class="inputinfo" id="blDimLevelInfo"></span>
+                <input type="range" id="blDimLevel" min="0" max="100" step="1" />
+              </div>
+              <div class="inputwrap">
+                <span class="inputtitle">BL Down interval</span>
+                <span class="inputinfo" id="blDimIntervalInfo"></span>
+                <input type="range" id="blDimInterval" min="5" max="300" step="5" />
+              </div>
+            </div>
+
+          </section>
+
+          <!-- LAYOUT -->
+          <section class="group" id="group_layout">
+            <div class="title"><span>layout</span></div>
+            <div class="flex-row">
+              <div class="inputwrap">
+                <label for="vuLayout" class="inputtitle">VU layout</label>
+                <select id="vuLayout" class="selectbox inputchange" name="vuLayout">
+                  <option value="0">Default</option>
+                  <option value="1">StreamLine</option>
+                  <option value="2">BoomBox</option>
+                  <option value="3">Studio</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <!-- VU BANDS -->
+          <section class="group" id="group_vubands">
+            <div class="title"><span>VU Bands</span></div>
+
+            <div class="flex-row">
+              <div class="checkbox" id="vuEnabled">
+                <div class="knob"></div>
+                VU meter
+              </div>
+            </div>
+
+            <div class="flex-row">
+              <div class="inputwrap">
+                <span class="inputtitle">bands</span>
+                <span class="inputinfo" id="vuBarsInfo"></span>
+                <input type="number" id="vuBars" min="5" max="64" />
+              </div>
+              <div class="inputwrap">
+                <span class="inputtitle">height</span>
+                <span class="inputinfo" id="vuHeightInfo"></span>
+                <input type="number" id="vuHeight" min="1" max="50" />
+              </div>
+              <div class="inputwrap">
+                <span class="inputtitle">gap</span>
+                <span class="inputinfo" id="vuGapInfo"></span>
+                <input type="number" id="vuGap" min="0" max="6" />
+              </div>
+              <div class="inputwrap">
+                <span class="inputtitle">fade speed</span>
+                <span class="inputinfo" id="vuFadeInfo"></span>
+                <input type="number" id="vuFade" min="0" max="10" />
+              </div>
+            </div>
+
+            <div class="flex-row">
+              <div class="inputwrap">
+                <span class="inputtitle">mid threshold</span>
+                <span class="inputinfo" id="vuMidPctInfo"></span>
+                <input type="range" id="vuMidPct" min="25" max="90" step="5" />
+              </div>
+              <div class="inputwrap">
+                <span class="inputtitle">high threshold</span>
+                <span class="inputinfo" id="vuHighPctInfo"></span>
+                <input type="range" id="vuHighPct" min="45" max="100" step="5" />
+              </div>
+            </div>
+
+            <!-- MID: kapcsoló külön sorban -->
+            <div class="flex-row">
+              <div class="inputwrap">
+                <div class="checkbox" id="midColorEnabled">
+                  <div class="knob"></div>
+                  use custom mid color
+                </div>
+              </div>
+            </div>
+
+            <!-- MID: színválasztó + swatches -->
+            <div class="flex-row">
+              <div class="inputwrap">
+                <span class="inputtitle">middle color</span>
+                <input type="color" id="vuMidColor" />
+                <div class="swatches" data-target="vuMidColor">
+                  <button data-color="#ffffff" title="White"></button>
+                  <button data-color="#ff0000" title="Red"></button>
+                  <button data-color="#00ff00" title="Lime"></button>
+                  <button data-color="#0000ff" title="Blue"></button>
+                  <button data-color="#ffff00" title="Yellow"></button>
+                  <button data-color="#00ffff" title="Cyan"></button>
+                  <button data-color="#ff00ff" title="Magenta"></button>
+                  <button data-color="#ff8800" title="Orange"></button>
+                  <button data-color="#000000" title="Black"></button>
+                </div>
+              </div>
+            </div>
+
+            <!-- PEAK: kapcsoló külön sorban -->
+            <div class="flex-row">
+              <div class="inputwrap">
+                <div class="checkbox" id="peakColorEnabled">
+                  <div class="knob"></div>
+                  use custom peak color
+                </div>
+              </div>
+            </div>
+
+            <!-- PEAK: színválasztó + swatches -->
+            <div class="flex-row">
+              <div class="inputwrap">
+                <span class="inputtitle">peak color</span>
+                <input type="color" id="vuPeakColor" />
+                <div class="swatches" data-target="vuPeakColor">
+                  <button data-color="#ffffff" title="White"></button>
+                  <button data-color="#ff0000" title="Red"></button>
+                  <button data-color="#00ff00" title="Lime"></button>
+                  <button data-color="#0000ff" title="Blue"></button>
+                  <button data-color="#ffff00" title="Yellow"></button>
+                  <button data-color="#00ffff" title="Cyan"></button>
+                  <button data-color="#ff00ff" title="Magenta"></button>
+                  <button data-color="#ff8800" title="Orange"></button>
+                  <button data-color="#000000" title="Black"></button>
+                </div>
+              </div>
+            </div>
+
+            <!-- VU Labeltext: színválasztó + swatches -->
+            <div class="flex-row">
+              <div class="inputwrap">
+                <span class="inputtitle">label text color</span>
+                <input type="color" id="vuLabelTextColor" />
+                <div class="swatches" data-target="vuLabelTextColor">
+                  <button data-color="#ffffff" title="White"></button>
+                  <button data-color="#ff0000" title="Red"></button>
+                  <button data-color="#00ff00" title="Lime"></button>
+                  <button data-color="#0000ff" title="Blue"></button>
+                  <button data-color="#ffff00" title="Yellow"></button>
+                  <button data-color="#00ffff" title="Cyan"></button>
+                  <button data-color="#ff00ff" title="Magenta"></button>
+                  <button data-color="#ff8800" title="Orange"></button>
+                  <button data-color="#000000" title="Black"></button>
+                </div>
+              </div>
+            </div>
+
+            <!-- VU Label BG: színválasztó + swatches -->
+            <div class="flex-row">
+              <div class="inputwrap">
+                <span class="inputtitle">label bg color</span>
+                <input type="color" id="vuLabelBgColor" />
+                <div class="swatches" data-target="vuLabelBgColor">
+                  <button data-color="#ffffff" title="White"></button>
+                  <button data-color="#ff0000" title="Red"></button>
+                  <button data-color="#00ff00" title="Lime"></button>
+                  <button data-color="#0000ff" title="Blue"></button>
+                  <button data-color="#ffff00" title="Yellow"></button>
+                  <button data-color="#00ffff" title="Cyan"></button>
+                  <button data-color="#ff00ff" title="Magenta"></button>
+                  <button data-color="#ff8800" title="Orange"></button>
+                  <button data-color="#000000" title="Black"></button>
+                </div>
+              </div>
+            </div>
+
+            <!-- VU Label height (width) -->
+            <div class="flex-row">
+              <div class="inputwrap">
+                <span class="inputtitle">label width</span>
+                <span class="inputinfo" id="vuLabHgtsInfo"></span>
+                <input type="number" id="vuLabHgts" min="0" max="50" />
+              </div>
+            </div>
+
+            <div class="form-hint">Values are saved per layout.</div>
+          </section>
+
+          <!-- === VU Dynamics === -->
+          <section class="group" id="group_vudynamics">
+           <div class="title"><span>VU Dynamics</span></div>
+            <div class="flex-row">
+              <div class="inputwrap">
+                <span class="inputtitle">Expo (γ)</span>
+                <input type="range" id="vuExpo" min="50" max="300" step="1" />
+                <span class="rangeval" id="vuExpoVal">1.00</span>
+              </div>
+            </div>
+
+            <div class="flex-row">
+              <div class="inputwrap">
+                <span class="inputtitle">Floor (%)</span>
+                <input type="range" id="vuFloor" min="0" max="95" step="1" />
+                <span class="rangeval" id="vuFloorVal">60%</span>
+              </div>
+            </div>
+
+            <div class="flex-row">
+              <div class="inputwrap">
+                <span class="inputtitle">Ceil (%)</span>
+                <input type="range" id="vuCeil" min="5" max="100" step="1" />
+                <span class="rangeval" id="vuCeilVal">100%</span>
+              </div>
+            </div>
+
+            <div class="flex-row">
+              <div class="inputwrap">
+                <span class="inputtitle">Gain</span>
+                <input type="range" id="vuGain" min="50" max="200" step="1" />
+                <span class="rangeval" id="vuGainVal">1.00</span>
+              </div>
+            </div>
+
+            <div class="flex-row">
+              <div class="inputwrap">
+                <span class="inputtitle">Knee (%)</span>
+                <input type="range" id="vuKnee" min="0" max="20" step="1" />
+                <span class="rangeval" id="vuKneeVal">5%</span>
+              </div>
+            </div>
+          </section>
+          <!-- === /VU Dynamics === -->
+
+          <!-- VU MOVES (SMOOTHING / PEAKS) -->
+          <section class="group" id="group_vumoves">
+            <div class="title"><span>VU Smoothing</span></div>
+
+            <div class="flex-row">
+              <div class="inputwrap" style="width:100%;">
+                <span class="inputtitle">alpha up (0–100)</span>
+                <span class="inputinfo" id="vuAlphaUpInfo">0</span>
+                <input
+                  type="range"
+                  id="vuAlphaUp"
+                  data-slaveid="vuAlphaUpInfo"
+                  min="0" max="100" step="1"
+                />
+              </div>
+            </div>
+
+            <div class="flex-row">
+              <div class="inputwrap" style="width:100%;">
+                <span class="inputtitle">alpha down (0–100)</span>
+                <span class="inputinfo" id="vuAlphaDownInfo">0</span>
+                <input
+                  type="range"
+                  id="vuAlphaDown"
+                  data-slaveid="vuAlphaDownInfo"
+                  min="0" max="100" step="1"
+                />
+              </div>
+            </div>
+
+            <div class="flex-row">
+              <div class="inputwrap" style="width:100%;">
+                <span class="inputtitle">peak up (0–100)</span>
+                <span class="inputinfo" id="vuPeakUpInfo">0</span>
+                <input
+                  type="range"
+                  id="vuPeakUp"
+                  data-slaveid="vuPeakUpInfo"
+                  min="0" max="100" step="1"
+                />
+              </div>
+            </div>
+
+            <div class="flex-row">
+              <div class="inputwrap" style="width:100%;">
+                <span class="inputtitle">peak down (0–100)</span>
+                <span class="inputinfo" id="vuPeakDownInfo">0</span>
+                <input
+                  type="range"
+                  id="vuPeakDown"
+                  data-slaveid="vuPeakDownInfo"
+                  min="0" max="100" step="1"
+                />
+              </div>
+            </div>
+            <div class="form-hint">Values are saved per layout.</div>
+          </section>
+
+          <section class="group" id="group_misc">
+            <div class="title"><span>miscellaneous</span></div>
+            <div class="flex-row">
+              <div class="inputwrap">
+                <label for="dateFormat" class="inputtitle">Date format</label>
+                <select id="dateFormat" class="selectbox inputchange" name="dateFormat">
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="checkbox" id="showNameday">
+                <div class="knob"></div>
+                <span>Show nameday</span>
+              </div>
+            </div>
+
+            <div class="flex-row">
+              <div class="inputwrap">
+                <label for="clockFont" class="inputtitle">Clock font</label>
+                <select id="clockFont" class="selectbox inputchange" name="clockFont">
+                  <option value="0">DS_DIGI</option>
+                  <option value="1">PointedlyMad</option>
+                  <option value="2">Office</option>
+                  <option value="3">Oldtimer</option>
+                  <option value="4">LaradotSerif</option>
+                  <option value="5">Square</option>
+                  <option value="6">Decoder</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="flex-row">
+              <div class="checkbox" id="metaStNameSkip">
+                <div class="knob"></div>
+                <span>META station name skip</span>
+              </div>
+            </div>
+
+            <div class="flex-row">
+              <div class="checkbox" id="shortWeather">
+                <div class="knob"></div>
+                <span>Short weather info</span>
+              </div>
+            </div>
+
+            <div class="flex-row">
+              <div class="inputwrap">
+                <label for="weatherIconSet" class="inputtitle">Weather icon set</label>
+                <select id="weatherIconSet" class="selectbox inputchange" name="weatherIconSet">
+                  <option value="0">Default</option>
+                  <option value="1">Simple</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="flex-row align-center">
+
+              <div class="checkbox" id="directChannelChange">
+                <span class="label">Direct Channel Change</span>
+                <div class="knob"></div>
+              </div>
+
+              <div class="inline-number">
+                <span class="label">Return time (sec)</span>
+                <input type="number" id="stationsListReturnTime" min="2" max="30" />
+              </div>
+
+            </div>
+
+            <div class="flex-row">
+              <div class="checkbox" id="hours12">
+                <div class="knob"></div>
+                <span>12 hours clock</span>
+              </div>
+            </div>
+
+            <div class="flex-row">
+              <div class="checkbox" id="playlistMode">
+                <div class="knob"></div>
+                <span>Moving cursor playlist mode</span>
+              </div>
+            </div>
+
+            <div class="flex-row">
+              <div class="checkbox" id="stallWatchdog">
+                <div class="knob"></div>
+                <span>Stall watchdog</span>
+              </div>
+            </div>
+
+          </section>
+
+          <section class="group" id="group_tts">
+            <div class="title"><span>Speech clock (TTS)</span></div><div class="reset" data-name="ttsDndReset" title="reset"></div>
+            <div class="flex-row">
+             <div class="group">
+               <div class="checkbox" id="ttsEnabled">
+                 <div class="knob"></div>
+                 <span>Enable clock (TTS)</span>
+               </div>
+               <div class="inputwrap">
+                 <span class="inputtitle">Interval (min)</span>
+                 <span class="inputinfo" id="ttsIntervalInfo"></span>
+                 <input type="range" id="ttsInterval" min="15" max="240" step="15" />
+               </div>
+             </div>
+            </div>
+
+            <div class="flex-row">
+             <div class="group">
+               <div class="checkbox" id="ttsDuringPlayback">
+                 <div class="knob"></div>
+                 <span>Enable TTS During Playback</span>
+               </div>
+             </div>
+            </div>
+
+            <div class="flex-row">
+                <div class="inputwrap">
+                  <span class="inputtitle">DND – Begin</span>
+                  <input type="time" id="ttsDndStart" placeholder="--:--">
+                </div>
+                <div class="inputwrap">
+                  <span class="inputtitle">DND – End</span>
+                  <input type="time" id="ttsDndStop" placeholder="--:--">
+                </div>
+            </div>
+
+            <div class="flex-row">
+                <div class="form-hint">
+                If the field is left empty, the feature will be disabled.<br>
+                The switch will use the system time (as shown on the clock).
+                </div>
+            </div>
+
+            <div class="flex-row center">
+                  <div class="fb hl tool local" data-name="ttsDndApply">Apply</div>
+            </div>
+          </section>
+
+          <!-- LED STRIP -->
+          <section class="group" id="group_ledstrip" style="display:none">
+            <div class="title"><span>strip</span></div>
+            <div class="flex-row">
+              <div class="checkbox" id="lsEnabled"><div class="knob"></div>Enable LED strip</div>
+              <div class="checkbox" id="lsSsEnabled"><div class="knob"></div>Enable during screensaver</div>
+            </div>
+            <div class="flex-row">
+              <div class="inputwrap">
+                <label for="lsModel" class="inputtitle">effect</label>
+                <select id="lsModel" class="selectbox inputchange" name="lsModel">
+                  <option value="0">VU meter</option>
+                  <option value="1">Rainbow flow</option>
+                  <option value="2">Fire</option>
+                  <option value="3">Analog</option>
+				  <option value="4">Enkoder+VU</option>
+				  <option value="5">test1</option>
+				  <option value="6">test2</option>
+				  <option value="7">test3</option>
+				  <option value="8">test3</option>
+				  
+                </select>
+              </div>
+            </div>
+            <div class="flex-row">
+              <div class="inputwrap" style="width:100%">
+                <span class="inputtitle">brightness <span id="lsBrightnessInfo">80</span>%</span>
+                <input type="range" id="lsBrightness" min="0" max="100" value="80">
+              </div>
+            </div>
+            <div class="flex-row center">
+              <div class="fb hl tool local" data-name="applyLedstrip">Apply</div>
+            </div>
+          </section>
+
+        </div><!-- /#settingscontent -->
+      </div><!-- /#settingswrap -->
+
+      <div class="fb done group group_system" id="settingsdone">done</div>
+      <div id="copy">
+        powered by <a target="_blank" href="https://github.com/SimZs/yoRadio-Fusion">ёRadio Fusion</a>
+        <span id="version"></span>
+      </div>
+    </div><!-- /#playerwrap -->
+
+    <div class="toast" id="toast">Saved</div>
+
+    <script src="variables.js"></script>
+    <script src="script.js?v=pc18"></script>
+    <script>
+      // a “done” gomb a főoldalra visz
+      document.getElementById('settingsdone')?.addEventListener('click', () => {
+        window.location.href = '/';
+      });
+    </script>
+  </body>
+</html>
