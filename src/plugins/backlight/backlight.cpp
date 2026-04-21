@@ -46,12 +46,13 @@ void BacklightPlugin::activity() {
 }
 
 bool BacklightPlugin::justWoke() const {
-    return (millis() - lastUiWakeMs) < 500; // Ébresztés után ennyi ideig nem veszi figyelembe az érintéseket.
+    return (millis() - lastUiWakeMs) < 500; // Po wybudzeniu przez ten czas nie reaguje na dotyk.
 }
 
 
 void BacklightPlugin::wake() {
     Serial.println("backlight.cpp-->wake()");
+    Serial2.println("##SYS.WAKE#");
     if (!config.store.blDimEnable) return;
 
     // Ha még nincs baseline, most rögzítsük

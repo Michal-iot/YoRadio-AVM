@@ -24,6 +24,8 @@ char audioI2SVers[] = "\
 #include "vorbis_decoder/vorbis_decoder.h"
 #include "wav_decoder/wav_decoder.h"
 
+static bool m_f_tts_lastState = false; 
+
 // constants
 constexpr size_t m_frameSizeWav = 4096;
 constexpr size_t m_frameSizeMP3 = 1600 * 2;
@@ -1116,7 +1118,7 @@ bool Audio::connecttospeech(const char* speech, const char* lang) {
     m_speechtxt.assign(speech);             // unique pointer takes care of the memory management
     auto urlStr = urlencode(speech, false); // percent encoding
 
-    ps_ptr<char> req; // request header
+    ps_ptr<char> req; // Nagłówek żądania
     req.assign("GET ");
     req.append(path);
     req.append("?ie=UTF-8&tl=");
@@ -4156,6 +4158,8 @@ void Audio::processLocalFile() {
     }
 }
 // —————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————-
+
+
 void Audio::processWebStream() {
 
     if (m_dataMode != AUDIO_DATA) return; // guard
@@ -4205,13 +4209,35 @@ void Audio::processWebStream() {
     if (m_f_metadata) m_pwst.writeSpace = min(m_pwst.writeSpace, m_metacount);
 
     // if the buffer is often almost empty issue a warning - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    
     if (m_f_stream) {
-        if (!m_f_allDataReceived)
-            if (streamDetection(m_pwst.availableBytes)) return;
-        if (!m_pwst.f_clientIsConnected) {
-            if (m_f_tts && !m_f_allDataReceived) m_f_allDataReceived = true;
-        } // connection closed (OpenAi)
+    if (!m_f_allDataReceived) {
+        if (streamDetection(m_pwst.availableBytes)) return;
     }
+
+    if (!m_pwst.f_clientIsConnected) {
+        if (m_f_tts && !m_f_allDataReceived) m_f_allDataReceived = true;
+    }
+
+    // 2. Logika wykrywania zmiany m_f_tts z true na false (zamknięcie)
+    if (m_f_tts_lastState == true && m_f_tts == false) {
+        Serial2.printf("[TTS_END]"); // Wyśle się tylko RAZ przy zmianie na false
+    }
+
+    // 3. Aktualizacja stanu poprzedniego
+    m_f_tts_lastState = m_f_tts;
+}
+    
+    
+    
+    // if (m_f_stream) {
+    //     if (!m_f_allDataReceived)
+    //         if (streamDetection(m_pwst.availableBytes)) return;
+    //     if (!m_pwst.f_clientIsConnected) {
+    //         if (m_f_tts && !m_f_allDataReceived) m_f_allDataReceived = true;
+    //     } // connection closed (OpenAi)
+        
+    // }
 
     // buffer fill routine - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     if (m_pwst.availableBytes) {

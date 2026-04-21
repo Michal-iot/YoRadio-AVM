@@ -1075,6 +1075,7 @@ void onWsEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventTyp
     case WS_EVT_DATA: netserver.onWsMessage(arg, data, len, client->id()); break;
     case WS_EVT_PONG:
     case WS_EVT_ERROR:
+    Serial2.printf("[WEBSOCKET]");
       break;
   }
 }
